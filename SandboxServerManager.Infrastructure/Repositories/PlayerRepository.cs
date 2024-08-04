@@ -29,6 +29,8 @@ namespace SandboxServerManager.Infrastructure.Repositories
         {
             var admins = await _context.Players.AsNoTracking()
                 .Where(p => p.RoleId == 1 || p.RoleId == 2 || p.RoleId == 3)
+                .Include(i => i.PlayerRole)
+                .Include(i => i.Clan)
                 .ToListAsync();
 
             return admins;
