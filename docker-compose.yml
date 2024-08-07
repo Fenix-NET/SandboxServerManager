@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  sandboxservermanager.webapi:
+    build:
+      context: .
+      dockerfile: SandboxServerManager.WebApi/Dockerfile
+    environment:
+      - ConnectionStrings__SandboxConnString=Host=snbxdb;Database=SandboxServerDb;Username=postgres;Password=959595
+    ports:
+      - 5154:8080
+      - 5155:8081
+    depends_on:
+      - snbxdb
+    networks:
+      - snbx-network
+    
+
+  snbxdb:
+    image: postgres
+    container_name: snbxdb
+    environment:
+      - POSTGRES_DB=SandboxServerDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=959595
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - snbx-network
+
+volumes:
+  pgdata:
+
+networks:
+  snbx-network:
+    driver: bridge
